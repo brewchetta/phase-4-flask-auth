@@ -12,8 +12,21 @@
 
 ## Getting Started
 
-Fork / clone the repo and run `pipenv install`.
+Fork / clone the repo and run
+```bash
+pipenv install
+```
 
-To start the client, create a seperate terminal and run `npm install --prefix client` followed by `npm start --prefix client`.
+To start the client, create a separate terminal and run:
+```bash
+npm install --prefix client
+npm start --prefix client
+```
 
-To start the server, first run `pipenv shell` and `cd server`. Then run `flask db upgrade` and `flask run --debug`.
+To start the server:
+```bash
+pipenv shell
+cd server
+flask db upgrade
+flask run --debug
+```

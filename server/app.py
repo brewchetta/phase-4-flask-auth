@@ -47,7 +47,7 @@ def create_user():
 def login():
     json = request.json
     user = User.query.where(User.username == json["username"]).first()
-    if user and bcrypt.check_password_hash(user.password_hash, json['password']):        
+    if user and bcrypt.check_password_hash(user.password_hash, json['password']):
         session['user_id'] = user.id
         return user.to_dict(), 201
     else:
@@ -83,4 +83,4 @@ def get_cartoons():
 # APP RUN #
 
 if __name__ == '__main__':
-    app.run(port=5555, debug=True)
+    app.run(port=5000, debug=True)
