@@ -8,33 +8,6 @@ function App() {
 
   const [currentUser, setCurrentUser] = useState(null)
 
-  useEffect(() => {
-    fetch('/current_session')
-    .then(res => {
-      if (res.ok) {
-        res.json()
-        .then(user => setCurrentUser(user))
-      }
-    })
-  }, [])
-
-  function attemptLogin(userInfo) {
-    fetch('/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accepts': 'application/json'
-      },
-      body: JSON.stringify(userInfo)
-    })
-    .then(res => {
-      if (res.ok) {
-        res.json()
-        .then(user => setCurrentUser(user))
-      }
-    })
-  }
-
   function attemptSignup(userInfo) {
     fetch('/users', {
       method: 'POST',
@@ -54,19 +27,17 @@ function App() {
 
   function logout() {
     setCurrentUser(null)
-    fetch('/logout', { method: 'DELETE' })
   }
 
   return (
     <div className="App">
 
-      { !currentUser ? <Login attemptLogin={attemptLogin} /> : null }
-
-      { !currentUser ? <Signup attemptSignup={attemptSignup} /> : null }
+      <Signup attemptSignup={attemptSignup} />
 
       { currentUser ? <UserDetails currentUser={currentUser} logout={logout} /> : null }
 
       <Cartoons />
+
     </div>
   );
 }
