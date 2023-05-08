@@ -17,12 +17,8 @@ function App() {
       },
       body: JSON.stringify(userInfo)
     })
-    .then(res => {
-      if (res.ok) {
-        res.json()
-        .then(user => setCurrentUser(user))
-      }
-    })
+    .then(res => res.json())
+    .then(data => setCurrentUser(data))
   }
 
   function logout() {
