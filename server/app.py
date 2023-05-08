@@ -30,16 +30,36 @@ def create_user():
     new_user = User(username=json['username'])
     db.session.add(new_user)
     db.session.commit()
+    session['user_id'] = new_user.id
     return new_user.to_dict(), 201
 
-
+@app.get('/check_session')
+def check_session():
+    user_id = session["user_id"]
+    current_user = User.query.get(user_id)
+    if current_user:
+        return current_user.to_dict(), 200
+    else:
+        return { 'message': "You're not logged in" }, 401
+    
 
 # SESSION LOGIN/LOGOUT#
 
 @app.post('/login')
 def login():
-    pass
+    json = request.json
+    current_user = User.query.where(User.username == json['username']).first()
+    if (current_user):
+        session['user_id'] = current_user.id
+        return current_user.to_dict(), 201
+    else:
+        return { 'message': 'Invalid username or password'}, 401
 
+
+@app.delete('/logout')
+def logout():
+    session.pop('user_id')
+    return {}, 204
 
 # EXAMPLE OTHER RESOURCES WITH AUTH #
 
