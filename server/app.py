@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
 
+# we'll use these later...
+# from flask_bcrypt import Bcrypt
+# bcrypt = Bcrypt(app)
+# bcrypt.generate_password_hash(password).decode('utf-8')
+# bcrypt.check_password_hash(hashed_password, password)
+
 from flask import Flask, request, session
 from flask_migrate import Migrate
 
 from models import db, User
-
-from flask_bcrypt import Bcrypt
 
 app = Flask(__name__)
 app.secret_key = b'Y\xf1Xz\x00\xad|eQ\x80t \xca\x1a\x10K'
@@ -13,17 +17,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.json.compact = False
 
-bcrypt = Bcrypt(app)
-
 migrate = Migrate(app, db)
 
 db.init_app(app)
-
-def authorize():
-    user_id = session["user_id"]
-    current_user = User.query.get(user_id)
-    if not current_user:
-        return { 'error': 'Not logged in' }, 401
 
 
 # USER SIGNUP #
@@ -31,8 +27,7 @@ def authorize():
 @app.post('/users')
 def create_user():
     json = request.json
-    pw_hash = bcrypt.generate_password_hash(json['password']).decode('utf-8')
-    new_user = User(username=json['username'], password_hash=pw_hash)
+    new_user = User(username=json['username'])
     db.session.add(new_user)
     db.session.commit()
     session['user_id'] = new_user.id
@@ -54,7 +49,7 @@ def check_session():
 def login():
     json = request.json
     current_user = User.query.where(User.username == json['username']).first()
-    if (current_user and bcrypt.check_password_hash(current_user.password_hash, json['password'])):
+    if (current_user):
         session['user_id'] = current_user.id
         return current_user.to_dict(), 201
     else:
@@ -70,23 +65,12 @@ def logout():
 
 @app.get('/cartoons')
 def get_cartoons():
-    authorize()
     return [
-        {
-            'id': 1,
-            'name': "Yogi Bear"
-        }
+        { 'id': 1, 'name': 'Teenage Mutant Ninja Turtles' },
+        { 'id': 2, 'name': 'Powerpuff Girls' },
+        { 'id': 3, 'name': 'Thunder Cats' }
     ], 200
-    
-# @app.patch('/pictures/<int:id>')
-# def patch_picture(id):
-#     user_id = session["user_id"]
-#     current_user = User.query.get(user_id)
-#     pic = Picture.query.get(id)
-#     if current_user and (pic in current_user.pictures):
-#         do stuff make the patch
-#     else:
-#         not authorized buddy
+
 
 # APP RUN #
 

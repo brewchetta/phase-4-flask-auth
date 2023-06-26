@@ -12,7 +12,6 @@ class User(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String, unique=True)
-    password_hash = db.Column(db.String)
 
     def __repr__(self):
         return f'<User id="{self.id}" username="{self.username}">'
