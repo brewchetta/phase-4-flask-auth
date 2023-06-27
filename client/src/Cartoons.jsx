@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-function Cartoons() {
+function Cartoons({ currentUser }) {
 
   const [cartoons, setCartoons] = useState([])
 
@@ -10,9 +10,11 @@ function Cartoons() {
       if (res.ok) {
         res.json()
         .then(data => setCartoons(data))
+      } else {
+        setCartoons( [] )
       }
     })
-  }, [])
+  }, [ currentUser ])
 
   return (
 

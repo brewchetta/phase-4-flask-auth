@@ -30,3 +30,28 @@ cd server
 flask db upgrade
 flask run --debug
 ```
+
+Notes:
+
+Send credentials from frontend
+
+Find user with the username
+
+Make sure they put in the correct password
+
+Confirmation message that they're logged in
+
+Set a cookie --> browser information
+HTTP/HTTPS is STATELESS
+
+Once cookies is set....
+
+When we refresh:
+
+Check the cookie on the backend to make sure it's valid
+
+If user attached to cookie...
+
+Send that user info back
+
+To log out DESTROY THE COOKIEEEEEEE

@@ -8,8 +8,18 @@ function App() {
 
   const [currentUser, setCurrentUser] = useState(null)
 
+  useEffect(() => {
+    fetch('/check_session')
+    .then(res => {
+      if (res.ok) {
+        res.json()
+        .then( data => setCurrentUser(data) )
+      }
+    })
+  }, [])
+
   function attemptSignup(userInfo) {
-    fetch('/users', {
+    fetch('/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -23,16 +33,17 @@ function App() {
 
   function logout() {
     setCurrentUser(null)
+    fetch('/logout', { method: "DELETE" })
   }
 
   return (
     <div className="App">
 
-      <Signup attemptSignup={attemptSignup} />
+      { !currentUser ? <Signup attemptSignup={attemptSignup} /> : null }
 
       { currentUser ? <UserDetails currentUser={currentUser} logout={logout} /> : null }
 
-      <Cartoons />
+      <Cartoons currentUser={currentUser} />
 
     </div>
   );
