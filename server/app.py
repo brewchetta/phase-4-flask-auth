@@ -3,8 +3,8 @@
 # we'll use these later...
 # from flask_bcrypt import Bcrypt
 # bcrypt = Bcrypt(app)
-# bcrypt.generate_password_hash(password).decode('utf-8')
-# bcrypt.check_password_hash(hashed_password, password)
+# bcrypt.generate_password_hash(some_password_string).decode('utf-8')
+# bcrypt.check_password_hash(hashed_password_in_your_db, posted_password_to_check_against)
 
 from flask import Flask, request, session
 from flask_migrate import Migrate
