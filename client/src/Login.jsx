@@ -16,6 +16,8 @@ function Login({attemptLogin}) {
   return (
     <form onSubmit={handleSubmit}>
 
+      <h2>Login</h2>
+
       <input type="text"
       onChange={handleChangeUsername}
       value={username}

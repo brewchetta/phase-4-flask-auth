@@ -16,6 +16,8 @@ function Signup({attemptSignup}) {
   return (
     <form onSubmit={handleSubmit}>
 
+      <h2>Signup</h2>
+
       <input type="text"
       onChange={handleChangeUsername}
       value={username}

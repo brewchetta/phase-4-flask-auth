@@ -1,4 +1,4 @@
-# Flask Authentication
+# Flask Auth
 
 ## Learning Goals
 
