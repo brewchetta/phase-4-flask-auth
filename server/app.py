@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 
-# we'll use these later...
+### we'll use these later... ###
 # from flask_bcrypt import Bcrypt
 # bcrypt = Bcrypt(app)
 # bcrypt.generate_password_hash(password).decode('utf-8')
 # bcrypt.check_password_hash(hashed_password, password)
+#################################
 
 from flask import Flask, jsonify, request, session
 from flask_migrate import Migrate
