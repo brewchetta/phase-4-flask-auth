@@ -30,3 +30,11 @@ cd server
 flask db upgrade
 python app.py
 ```
+
+## Additional Resources
+
+[MDN Using HTTP Cookies](https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies)
+
+[Flask Session](https://flask-session.readthedocs.io/en/latest/)
+
+[React Proxying API Requests](https://create-react-app.dev/docs/proxying-api-requests-in-development/)
