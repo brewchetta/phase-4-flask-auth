@@ -23,10 +23,10 @@ npm install --prefix client
 npm start --prefix client
 ```
 
-To start the server:
+To start the server in another terminal:
 ```bash
 pipenv shell
 cd server
 flask db upgrade
-flask run --debug
+python app.py
 ```
