@@ -24,7 +24,7 @@ db.init_app(app)
 
 # USER SIGNUP #
 
-@app.post('/users')
+@app.post('/api/users')
 def create_user():
     json = request.json
     new_user = User(username=json['username'])
@@ -36,14 +36,14 @@ def create_user():
 
 # SESSION LOGIN/LOGOUT#
 
-@app.post('/login')
+@app.post('/api/login')
 def login():
     pass
 
 
 # EXAMPLE OTHER RESOURCES WITH AUTH #
 
-@app.get('/cartoons')
+@app.get('/api/cartoons')
 def get_cartoons():
     return [
         { 'id': 1, 'name': 'Teenage Mutant Ninja Turtles' },
