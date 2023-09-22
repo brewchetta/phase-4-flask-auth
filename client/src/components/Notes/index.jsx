@@ -6,9 +6,9 @@ const POST_HEADERS = {
   'Accepts': 'application/json'
 }
 
-const URL = "http://localhost:5555/api/v1"
+const URL = "/api/v1"
 
-function Notes() {
+function Notes({ currentUser }) {
 
   // STATE //
 
@@ -17,6 +17,9 @@ function Notes() {
   // EFFECTS //
 
   useEffect(() => {
+    if (!currentUser) {
+      setNotes([])
+    }
     fetch(URL + '/notes')
     .then(res => {
       if (res.ok) {
@@ -25,7 +28,7 @@ function Notes() {
       }
     })
     .catch(e => console.log(e))
-  }, [])
+  }, [ currentUser ])
 
   // EVENTS //
 

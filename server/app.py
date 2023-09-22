@@ -4,6 +4,7 @@ from flask import Flask, jsonify, request, session
 from flask_migrate import Migrate
 from flask_bcrypt import Bcrypt
 
+
 from models import db, User, Note
 
 app = Flask(__name__)
@@ -22,7 +23,12 @@ URL_PREFIX = '/api/v1'
 
 # HELPER METHODS #
 
-# something will go here later
+def logged_in_user():
+    return User.query.filter(User.id == session.get('user_id')).first()
+
+def authorize():
+    if not logged_in_user():
+        return {'message': "No logged in user"}, 401
 
 # USER SIGNUP #
 
@@ -37,6 +43,7 @@ def create_user():
         )
         db.session.add(new_user)
         db.session.commit()
+        session['user_id'] = new_user.id
         return new_user.to_dict(), 201
     except Exception as e:
         return { 'error': str(e) }, 406
@@ -51,22 +58,44 @@ def login():
     data['password']
 
     if user and bcrypt.check_password_hash(user.password_hash, data["password"]):
+        session['user_id'] = user.id
         return user.to_dict(), 202
+
     else:
         return { "error": "Invalid username or password" }, 401
+    
+
+@app.delete(URL_PREFIX + '/logout')
+def logout():
+    session.pop('user_id')
+    return {}, 204
+
+@app.get(URL_PREFIX + '/check_session')
+def check_session():
+    print("---------SESSION----------------")
+    print(session)
+    user_id = session.get('user_id')
+    if user_id:
+        user = User.query.filter(User.id == user_id).first()
+        return user.to_dict(), 200
+    else:
+        return {}, 401
 
 
 # EXAMPLE OTHER RESOURCES #
 
 @app.get(URL_PREFIX + '/notes')
 def get_notes():
-    return jsonify( [note.to_dict() for note in Note.query.all()] ), 200
+    authorize()
+    return jsonify( [note.to_dict() for note in logged_in_user().notes] ), 200
 
 @app.post(URL_PREFIX + '/notes')
 def create_note():
+    authorize()
     try:
         data = request.json
         new_note = Note(**data)
+        new_note.user_id = session.get('user_id')
         db.session.add(new_note)
         db.session.commit()
         return jsonify( new_note.to_dict() ), 201

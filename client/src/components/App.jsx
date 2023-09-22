@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import UserPanel from "./UserPanel"
 import Notes from "./Notes"
 
@@ -7,13 +7,25 @@ const POST_HEADERS = {
   'Accepts': 'application/json'
 }
 
-const URL = "http://localhost:5555/api/v1"
+const URL = "/api/v1"
 
 function App() {
 
   // STATE //
 
   const [currentUser, setCurrentUser] = useState(null)
+
+  useEffect(() => {
+    async function checkSession() {
+      const response = await fetch(URL + '/check_session')
+
+      if (response.ok) {
+        const data = await response.json()
+        setCurrentUser( data )
+      }
+    }
+    checkSession()
+  }, [])
 
 
   // SIGNUP, LOGIN AND LOGOUT FNS //
@@ -48,6 +60,9 @@ function App() {
 
   function logout() {
     setCurrentUser(null)
+    fetch(URL + '/logout', {
+      method: 'DELETE'
+    })
   }
 
 
@@ -64,7 +79,7 @@ function App() {
       attemptSignup={attemptSignup}
       logout={logout} />
 
-      <Notes />
+      <Notes currentUser={currentUser} />
 
     </div>
   );
