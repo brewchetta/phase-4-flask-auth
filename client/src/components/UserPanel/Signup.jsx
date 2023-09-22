@@ -1,20 +1,28 @@
 import { useState } from 'react'
 
-function Login({attemptLogin}) {
+function Signup({attemptSignup}) {
+
+  // STATE //
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+
+  // EVENTS //
 
   const handleChangeUsername = e => setUsername(e.target.value)
   const handleChangePassword = e => setPassword(e.target.value)
 
   function handleSubmit(e) {
     e.preventDefault()
-    attemptLogin({username, password})
+    attemptSignup({username, password})
   }
 
+  // RENDER //
+
   return (
-    <form onSubmit={handleSubmit}>
+    <form className='user-form' onSubmit={handleSubmit}>
+
+      <h2>Signup</h2>
 
       <input type="text"
       onChange={handleChangeUsername}
@@ -29,7 +37,7 @@ function Login({attemptLogin}) {
       />
 
       <input type="submit"
-      value='Login'
+      value='Signup'
       />
 
     </form>
@@ -37,4 +45,4 @@ function Login({attemptLogin}) {
 
 }
 
-export default Login
+export default Signup
