@@ -4,7 +4,7 @@ import Notes from "./Notes"
 
 const POST_HEADERS = {
   'Content-Type': 'application/json',
-  'Accepts': 'application/json'
+  'Accepts': 'application/json',
 }
 
 const URL = "http://localhost:5555/api/v1"
@@ -19,18 +19,23 @@ function App() {
   // SIGNUP, LOGIN AND LOGOUT FNS //
 
   async function attemptSignup(userInfo) {
-    const res = await fetch(URL + '/users', {
-      method: 'POST',
-      headers: POST_HEADERS,
-      body: JSON.stringify(userInfo)
-    })
-    if (res.ok) {
-      const data = await res.json()
-      setCurrentUser(data)
-    } else {
-      alert('Invalid sign up')
+    try {
+      const res = await fetch(URL + '/users', {
+        method: 'POST',
+        headers: POST_HEADERS,
+        body: JSON.stringify(userInfo)
+      })
+      if (res.ok) {
+        const data = await res.json()
+        setCurrentUser(data)
+      } else {
+        alert('Invalid sign up')
+      }
+    } catch (error) {
+      alert(error)
     }
   }
+
 
   async function attemptLogin(userInfo) {
     const res = await fetch(URL + '/login', {
@@ -45,6 +50,7 @@ function App() {
       alert('Invalid sign up')
     }
   }
+
 
   function logout() {
     setCurrentUser(null)
