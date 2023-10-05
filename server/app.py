@@ -28,7 +28,12 @@ URL_PREFIX = '/api/v1'
 
 # HELPER METHODS #
 
-# something will go here later
+def current_user():
+    return User.query.filter(User.id == session.get('user_id')).first()
+
+def check_admin():
+    return current_user() and current_user().username == "chett2"
+
 
 # USER SIGNUP #
 
@@ -65,19 +70,38 @@ def login():
     
     else:
         return jsonify( {"message": "Invalid username or password"} ), 401
+    
+
+@app.get(URL_PREFIX + '/check_session')
+def check_session():
+    user = current_user()
+    if user:
+        return jsonify( user.to_dict() ), 200
+    else:
+        return {}, 400
+    
+
+@app.delete(URL_PREFIX + '/logout')
+def logout():
+    session.pop('user_id')
+    return {}, 204
 
 
 # EXAMPLE OTHER RESOURCES #
 
 @app.get(URL_PREFIX + '/notes')
 def get_notes():
-    return jsonify( [note.to_dict() for note in Note.query.all()] ), 200
+    if check_admin():
+        return jsonify( [ note.to_dict() for note in current_user().notes ] ), 200
+    else:
+        return "Not allowed to do that", 401
 
 @app.post(URL_PREFIX + '/notes')
 def create_note():
     try:
         data = request.json
         new_note = Note(**data)
+        new_note.user = current_user()
         db.session.add(new_note)
         db.session.commit()
         return jsonify( new_note.to_dict() ), 201

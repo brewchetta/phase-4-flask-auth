@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import UserPanel from "./UserPanel"
 import Notes from "./Notes"
 
@@ -7,13 +7,27 @@ const POST_HEADERS = {
   'Accepts': 'application/json',
 }
 
-const URL = "http://localhost:5555/api/v1"
+const URL = "/api/v1"
 
 function App() {
 
   // STATE //
 
   const [currentUser, setCurrentUser] = useState(null)
+  const [loaded, setLoaded] = useState(false)
+
+  // USEEFFECT //
+
+  useEffect(() =>  {
+    fetch( URL + '/check_session' )
+    .then( res => {
+      if (res.ok) {
+        res.json() 
+        .then( data => setCurrentUser(data) )
+      }
+      setLoaded(true)
+    })
+  }, [])
 
 
   // SIGNUP, LOGIN AND LOGOUT FNS //
@@ -54,26 +68,38 @@ function App() {
 
   function logout() {
     setCurrentUser(null)
+    fetch(URL + '/logout', {
+      method: 'DELETE'
+    })
   }
 
 
   // RENDER //
 
-  return (
-    <div className="App">
+  if (!loaded) {
 
-      <h1>Authentication + Authorization</h1>
+    return <h1>LOADING......</h1>
 
-      <UserPanel
-      currentUser={currentUser}
-      attemptLogin={attemptLogin}
-      attemptSignup={attemptSignup}
-      logout={logout} />
+  } else {
 
-      <Notes />
+    return (
+      <div className="App">
+  
+        <h1>Authentication + Authorization</h1>
+  
+        <UserPanel
+        currentUser={currentUser}
+        attemptLogin={attemptLogin}
+        attemptSignup={attemptSignup}
+        logout={logout} />
+  
+        <Notes />
+  
+      </div>
+    );
 
-    </div>
-  );
+  }
+
 }
 
 export default App;
