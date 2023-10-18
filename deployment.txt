@@ -1,0 +1,71 @@
+# FOR DEPLOYMENT #################
+
+
+## Environment #####
+
+# create a .env file at the root of the project
+
+# pipenv install dotenv
+
+# somewhere near the start of app.py add:
+# from dotenv import load_dotenv
+# load_dotenv()
+
+# add the .env file to the .gitignore
+
+# add a line in the .env for postgresql
+
+
+## React Build #####
+
+# once your react is in a good place run `npm run build --prefix client`
+
+# you can also run `npm run build` if you're already in the client folder
+
+# you should now be able to see `client/build` as a new file (it might make sense to gitignore it)
+
+# we'll set up flask to default to react code if it has no proper route...
+
+# in app.py make your flask app code look like this:
+# app = Flask(
+#     __name__,
+#     static_url_path='',
+#     static_folder='../client/build',
+#     template_folder='../client/build'
+# )
+
+# @app.route('/')
+# @app.route('/<int:id>')
+# def index(id=0):
+#     return render_template("index.html")
+
+
+## Additional Flask Config #####
+
+# we'll also need to install gunicorn to properly run the application on render:
+# pipenv install gunicorn psycopg2-binary
+
+# We'll need to add the application requirements to a file with the command below:
+# pipenv requirements > requirements.txt
+
+# add the sqlalchemy uri as shown below
+
+
+## On Your New Render Project #####
+
+# click New+ and use github to find your committed and pushed project
+
+# create your new we application and add these configurations:
+# Environment: Python 3
+# Branch: main
+# Build Command: pip install -r requirements.txt && npm install --prefix client && npm run build --prefix client
+# Start Command: gunicorn --chdir app:app
+
+# the app will fail to build but that's ok, we need to do one more thing...
+
+# in the environment tab add these additional bits of configuration:
+# PYTHON_VERSION=3.8.13
+# DATABASE_URI=whatever_postgresql_uri_you_got
+
+
+##################################

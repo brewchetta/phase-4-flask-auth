@@ -9,12 +9,14 @@ from models import db, User, Note
 
 app = Flask(__name__)
 app.secret_key = b'Y\xf1Xz\x00\xad|eQ\x80t \xca\x1a\x10K'
+# TODO: We'll need to change the sqlalchemy uri to postgres below
+# os.environ.get('DATABASE_URI')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.json.compact = False
 
 # cors = CORS(app, resources={r"/api/*": {
-#     "origins": "http://localhost:4000", 
+#     "origins": "http://localhost:4000",
 #     "methods": ["GET", "POST"]
 # }})
 
@@ -63,14 +65,14 @@ def login():
     json_data = request.json
     print(session.get('user_id'))
     user = User.query.filter(User.username == json_data['username']).first()
-    
+
     if user and bcrypt.check_password_hash( user.password_hash, json_data['password'] ):
         session["user_id"] = user.id
         return user.to_dict(), 202
-    
+
     else:
         return jsonify( {"message": "Invalid username or password"} ), 401
-    
+
 
 @app.get(URL_PREFIX + '/check_session')
 def check_session():
@@ -79,7 +81,7 @@ def check_session():
         return jsonify( user.to_dict() ), 200
     else:
         return {}, 400
-    
+
 
 @app.delete(URL_PREFIX + '/logout')
 def logout():
