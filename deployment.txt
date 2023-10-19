@@ -5,7 +5,7 @@
 
 # create a .env file at the root of the project
 
-# pipenv install dotenv
+# pipenv install python-dotenv
 
 # somewhere near the start of app.py add:
 # from dotenv import load_dotenv

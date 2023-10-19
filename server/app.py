@@ -1,24 +1,28 @@
 #!/usr/bin/env python3
+from dotenv import load_dotenv
+load_dotenv()
 
-from flask import Flask, jsonify, request, session
+import os
+
+from flask import Flask, jsonify, request, session, render_template
 from flask_migrate import Migrate
 from flask_bcrypt import Bcrypt
 # from flask_cors import CORS
 
 from models import db, User, Note
 
-app = Flask(__name__)
+app = Flask(
+    __name__,
+    static_url_path='',
+    static_folder='../client/build',
+    template_folder='../client/build'
+)
 app.secret_key = b'Y\xf1Xz\x00\xad|eQ\x80t \xca\x1a\x10K'
-# TODO: We'll need to change the sqlalchemy uri to postgres below
-# os.environ.get('DATABASE_URI')
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
+
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('POSTGRESQL_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.json.compact = False
 
-# cors = CORS(app, resources={r"/api/*": {
-#     "origins": "http://localhost:4000",
-#     "methods": ["GET", "POST"]
-# }})
 
 bcrypt = Bcrypt(app)
 
@@ -38,6 +42,11 @@ def check_admin():
 
 
 # USER SIGNUP #
+
+@app.route('/')
+@app.route('/<int:id>')
+def index(id=0):
+    return render_template("index.html")
 
 @app.post(URL_PREFIX + '/users')
 def create_user():
