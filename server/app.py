@@ -22,19 +22,16 @@ migrate = Migrate(app, db)
 
 db.init_app(app)
 
-URL_PREFIX = '/api/v1'
+URL_PREFIX = '/api'
 
-# HELPER METHODS #
-
-# something will go here later
 
 # USER SIGNUP #
 
 @app.post('/users')
 def create_user():
     try:
-        json = request.json
-        new_user = User(username=json['username'])
+        data = request.json
+        new_user = User(username=data['username'])
         db.session.add(new_user)
         db.session.commit()
         return new_user.to_dict(), 201

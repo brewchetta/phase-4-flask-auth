@@ -4,10 +4,10 @@ import Notes from "./Notes"
 
 const POST_HEADERS = {
   'Content-Type': 'application/json',
-  'Accepts': 'application/json'
+  'Accept': 'application/json'
 }
 
-const URL = "http://localhost:5555/api/v1"
+const URL = "http://localhost:5555/api"
 
 function App() {
 
@@ -18,6 +18,7 @@ function App() {
 
   // SIGNUP, LOGIN AND LOGOUT FNS //
 
+  // SIGNUP //
   async function attemptSignup(userInfo) {
     const res = await fetch(URL + '/users', {
       method: 'POST',
@@ -32,6 +33,7 @@ function App() {
     }
   }
 
+  // LOGIN //
   async function attemptLogin(userInfo) {
     const res = await fetch(URL + '/login', {
       method: 'POST',
@@ -46,6 +48,7 @@ function App() {
     }
   }
 
+  // LOGOUT //
   function logout() {
     setCurrentUser(null)
   }

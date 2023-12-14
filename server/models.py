@@ -14,6 +14,8 @@ db = SQLAlchemy(metadata=metadata)
 class User(db.Model, SerializerMixin):
     # TABLE #
     __tablename__ = 'users'
+
+    # COLUMNS #
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String, unique=True, nullable=False)
 
@@ -24,18 +26,19 @@ class User(db.Model, SerializerMixin):
     serialize_rules = ("-notes",)
 
 
-# --- NOTE --- #
+# --- NOTES --- #
 
 class Note(db.Model, SerializerMixin):
     # TABLE #
     __tablename__ = 'notes'
+
+    # COLUMNS #
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.String)
-
-    # RELATIONSHIP #
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
-    # SERIALIZER #
+    # RELATIONSHIP #
     user = db.relationship('User', back_populates='notes')
 
+    # SERIALIZER #
     serialize_rules = ("-user",)
