@@ -6,7 +6,7 @@ const POST_HEADERS = {
   'Accepts': 'application/json'
 }
 
-const URL = "http://localhost:5555/api/v1"
+const URL = "/api"
 
 function Notes() {
 
