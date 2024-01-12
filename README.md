@@ -44,7 +44,7 @@ POSTGRES_URL=your_url_goes_here
 Inside your flask project you'll need to change the `SQLALCHEMY_DATABASE_URI` to use your `POSTGRES_URL` rather than use the sqlite version. In `app.py` or `config.py` change `app.config['SQLALCHEMY_DATABASE_URI']` so it reads like this:
 
 ```python
-app.config['SQLALCHEMY_DATABASE_URI'] = os`.env`iron.get('POSTGRESQL_URL')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('POSTGRESQL_URL')
 ```
 
 It's also strongly recommended if you have any other secret keys or API keys that they get added with similar lines.
@@ -104,7 +104,7 @@ Branch: main (or deployment)
 
 Build Command: pip install -r requirements.txt && npm install --prefix client && npm run build --prefix client
 
-Start Command: gunicorn --chdir app:app
+Start Command: gunicorn --chdir server app:app
 ```
 
 At first the app will fail to build and that's totally ok because we need to add in one more bit of configuration in the `environment` tab:
