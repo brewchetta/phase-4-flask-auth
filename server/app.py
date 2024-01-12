@@ -1,15 +1,29 @@
 #!/usr/bin/env python3
 
-from flask import Flask, jsonify, request, session
+import os
+
+from flask import Flask, jsonify, request, session, render_template
 from flask_migrate import Migrate
+
+from dotenv import load_dotenv
 
 from flask_bcrypt import Bcrypt
 
 from models import db, User, Note
 
-app = Flask(__name__)
-app.secret_key = b'Y\xf1Xz\x00\xad|eQ\x80t \xca\x1a\x10K'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
+load_dotenv()
+
+app = Flask(
+    __name__,
+    static_url_path='',
+    static_folder='../client/build',
+    template_folder='../client/build'
+)
+
+print(os.environ.get('POSTGRES_URL'))
+
+app.secret_key = os.environ.get('SECRET_KEY')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('POSTGRES_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.json.compact = False
 
@@ -26,6 +40,11 @@ def current_user():
     if session["user_id"]:
         return User.query.filter(User.id == session["user_id"]).first()
 
+# REACT ROOT #
+@app.get('/')
+@app.route('/<int:id>')
+def index(id=0):
+    return render_template("index.html") 
 
 # USER SIGNUP #
 
